@@ -159,9 +159,9 @@ def login_post():
     if user and user['password'] == password:
         if user['subscription']:
             # Trigger the Streamlit app
-            subprocess.Popen(["streamlit", "run", "MLD_orgi.py"], shell=True)
+            #subprocess.Popen(["streamlit", "run", "MLD_orgi.py"], shell=True)
             # Redirect to the Streamlit app URL
-            return redirect('http://localhost:8501')
+            return redirect('https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py')
         else:
             flash('Subscription required!')
             return redirect(url_for('login'))
