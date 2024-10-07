@@ -133,41 +133,41 @@
 
 
 
-import subprocess
-from flask import Flask, render_template, request, redirect, url_for, flash
+# import subprocess
+# from flask import Flask, render_template, request, redirect, url_for, flash
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+# app = Flask(__name__)
+# app.secret_key = 'your_secret_key'
 
-# Dummy user data for login and subscription validation
-users = {
-    "user@example.com": {"password": "password123", "subscription": True},
-    "test@domain.com": {"password": "testpass", "subscription": False},
-}
+# # Dummy user data for login and subscription validation
+# users = {
+#     "user@example.com": {"password": "password123", "subscription": True},
+ #    "test@domain.com": {"password": "testpass", "subscription": False},
+# }
 
-@app.route('/')
-def login():
-    return render_template('login.html')
+# @app.route('/')
+# def login():
+#     return render_template('login.html')
 
-@app.route('/login', methods=['POST'])
-def login_post():
-    email = request.form.get('email')
-    password = request.form.get('password')
+# @app.route('/login', methods=['POST'])
+# def login_post():
+#     email = request.form.get('email')
+ #    password = request.form.get('password')
 
-    user = users.get(email)
+ #    user = users.get(email)
 
-    if user and user['password'] == password:
-        if user['subscription']:
-            # Trigger the Streamlit app
-            #subprocess.Popen(["streamlit", "run", "MLD_orgi.py"], shell=True)
-            # Redirect to the Streamlit app URL
-            return redirect('https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py')
-        else:
-            flash('Subscription required!')
-            return redirect(url_for('login'))
-    else:
-        flash('Invalid credentials!')
-        return redirect(url_for('login'))
+   #  if user and user['password'] == password:
+     #    if user['subscription']:
+       #      # Trigger the Streamlit app
+        #     #subprocess.Popen(["streamlit", "run", "MLD_orgi.py"], shell=True)
+     #        # Redirect to the Streamlit app URL
+           #  return redirect('https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py')
+      #   else:
+      #       flash('Subscription required!')
+      #       return redirect(url_for('login'))
+   #  else:
+     #    flash('Invalid credentials!')
+      #   return redirect(url_for('login'))
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+  #   app.run(debug=True)
