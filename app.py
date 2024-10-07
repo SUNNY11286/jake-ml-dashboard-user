@@ -267,8 +267,8 @@ def run_mld():
     if 'user' not in session:
         return redirect(url_for('login'))
     
-    subprocess.Popen(["streamlit", "run", "MLD.py"], shell=True)
-    return redirect('http://localhost:8501')
+    #subprocess.Popen(["streamlit", "run", "MLD.py"], shell=True)
+    return redirect('https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py') #redirect('http://localhost:8501')
 
 if __name__ == '__main__':
     app.run(debug=True)
