@@ -1,49 +1,27 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Login</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Register</title>
 </head>
-
 <body>
-
-    <div class="login-container">
-
-        <h1>Login</h1>
-
-        <form action="{{ url_for('login_post') }}" method="POST">
-
-            <input type="email" name="email" placeholder="Email" required>
-
-            <input type="password" name="password" placeholder="Password" required>
-
-            <button type="submit">Login</button>
-
-        </form>
-
-        <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
-
-        {% with messages = get_flashed_messages() %}
-
-          {% if messages %}
-
-            <div class="error">{{ messages[0] }}</div>
-
-          {% endif %}
-
-        {% endwith %}
-
-    </div>
-
+    <div class="container">
+        <form action="{{ url_for('register') }}" method="POST">
+            <h2>Register</h2>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <label for="subscription">Choose a subscription:</label>
+            <select name="subscription" id="subscription">
+                <option value="free">Free Trial</option>
+                <option value="pro">Pro - 100 rupees/month</option>
+                <option value="premium">Premium - 500 rupees/month</option>
+                <option value="on-demand">On Demand</option>
+            </select>
+            <button type="submit">Register</button>
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </form>
+    </div>
 </body>
-
 </html>

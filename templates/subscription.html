@@ -3,33 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Subscription</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="subscription-container col-md-4 col-sm-8">
-        <h1>Manage Subscription</h1>
-        <p>Current Plan: <strong>{{ current_plan }}</strong></p>
-        <form action="{{ url_for('update_subscription') }}" method="POST">
-            <select name="subscription" class="form-control">
-                {% for plan in plans %}
-                    <option value="{{ plan }}" {% if plan == current_plan %}selected{% endif %}>
-                        {{ plan }}
-                    </option>
-                {% endfor %}
+    <div class="container">
+        <h2>Your Current Subscription: {{ subscription }}</h2>
+        <form action="{{ url_for('subscription') }}" method="POST">
+            <label for="subscription">Upgrade/Change Subscription:</label>
+            <select name="subscription" id="subscription">
+                <option value="free">Free Trial</option>
+                <option value="pro">Pro - 100 rupees/month</option>
+                <option value="premium">Premium - 500 rupees/month</option>
+                <option value="on-demand">On Demand</option>
             </select>
-            <button type="submit" class="btn btn-success mt-3">Update Plan</button>
+            <button type="submit">Submit</button>
         </form>
-
-        <!-- Error Message -->
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div class="success">{{ messages[0] }}</div>
-          {% endif %}
-        {% endwith %}
     </div>
 </body>
 </html>

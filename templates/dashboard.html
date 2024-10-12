@@ -1,29 +1,44 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Dashboard</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Dashboard</title>
 </head>
-
 <body>
-
-    <div class="dashboard-container">
-
-        <h1>Welcome to your Dashboard!</h1>
-
-        <p>You are subscribed to the <strong>{{ subscription }}</strong> plan.</p>
-
-    </div>
-
+    <div class="container">
+        <h2>Welcome, {{ session['user'] }}!</h2>
+        <p>Your current subscription: <strong>{{ session['subscription'] }}</strong></p>
+        
+        {% if session['subscription'] == 'free' %}
+            <h3>Free Trial</h3>
+            <p>You have access to the free trial for 10 days. Consider upgrading for more features!</p>
+        {% elif session['subscription'] == 'pro' %}
+            <h3>Pro Subscription</h3>
+            <p>You have access to limited features. Upgrade to premium for full access.</p>
+        {% elif session['subscription'] == 'premium' %}
+            <h3>Premium Subscription</h3>
+            <p>Enjoy full access to all features!</p>
+            <p>You will be redirected to the full access site shortly...</p>
+        {% elif session['subscription'] == 'on-demand' %}
+            <h3>On-Demand Subscription</h3>
+            <p>Please check your email for further instructions.</p>
+            <p>You will be redirected to the full access site shortly...</p>
+        {% endif %}
+        
+        <div class="actions">
+            <a href="{{ url_for('subscription') }}" class="btn">Manage Subscription</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </div>
+    </div>
+    
+    {% if session['subscription'] in ['premium', 'on-demand'] %}
+        <script>
+            setTimeout(function() {
+                window.location.href = "https://caluda.com";
+            }, 5000); // Redirect after 5 seconds
+        </script>
+    {% endif %}
 </body>
-
 </html>
