@@ -1,465 +1,351 @@
-# # from flask import Flask, render_template, request, jsonify
-# # from ml_dashboard import MLDashboard
-# # import pandas as pd
-# # import io
-
-# # app = Flask(__name__)
-# # dashboard = MLDashboard()
-
-# # @app.route('/')
-# # def index():
-# #     return render_template('index.html')
-
-# # @app.route('/upload', methods=['POST'])
-# # def upload():
-# #     if 'file' not in request.files:
-# #         return jsonify({'error': 'No file part'})
-    
-# #     file = request.files['file']
-# #     if file.filename == '':
-# #         return jsonify({'error': 'No selected file'})
-    
-# #     if file and file.filename.endswith('.csv'):
-# #         stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
-# #         data = pd.read_csv(stream)
-# #         dashboard.data = data
-# #         columns = data.columns.tolist()
-# #         return jsonify({'columns': columns})
-# #     else:
-# #         return jsonify({'error': 'Invalid file type'})
-
-# # @app.route('/process', methods=['POST'])
-# # def process():
-# #     target = request.form.get('target')
-# #     model_type = request.form.get('model_type')
-    
-# #     if dashboard.data is None:
-# #         return jsonify({'error': 'No data uploaded'})
-    
-# #     results = dashboard.run_dashboard(target, model_type)
-# #     return jsonify(results)
-
-# # if __name__ == '__main__':
-# #     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from flask import Flask, render_template, request, redirect, url_for, flash
-
-# app = Flask(__name__)
-# app.secret_key = 'your_secret_key'
-
-# # Dummy user data for login and subscription validation
-# users = {
-#     "user@example.com": {"password": "password123", "subscription": True},
-#     "test@domain.com": {"password": "testpass", "subscription": False},
-# }
-
-# @app.route('/')
-# def login():
-#     return render_template('login.html')
-
-# @app.route('/login', methods=['POST'])
-# def login_post():
-#     email = request.form.get('email')
-#     password = request.form.get('password')
-
-#     user = users.get(email)
-
-#     if user and user['password'] == password:
-#         if user['subscription']:
-#             return redirect(url_for('run_mld'))
-#         else:
-#             flash('Subscription required!')
-#             return redirect(url_for('login'))
-#     else:
-#         flash('Invalid credentials!')
-#         return redirect(url_for('login'))
-
-# @app.route('/run_mld')
-# def run_mld():
-#     return "Running MLD.py logic"
-
-
-# # @app.route('/')
-# # def login():
-# #     return render_template('login.html')
-
-# # @app.route('/login', methods=['POST'])
-# # def login_post():
-# #     email = request.form.get('email')
-# #     password = request.form.get('password')
-
-# #     user = users.get(email)
-
-# #     if user and user['password'] == password:
-# #         if user['subscription']:
-# #             # Redirect to mld.py
-# #             return redirect(url_for('run_mld'))
-# #         else:
-# #             flash('Subscription required!')
-# #             return redirect(url_for('login'))
-# #     else:
-# #         flash('Invalid credentials!')
-# #         return redirect(url_for('login'))
-
-# # @app.route('/run_mld')
-# # def run_mld():
-# #     # Assuming you import or run MLD.py here
-# #     # For now, just return a placeholder response
-# #     return "Running MLD.py logic"
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-    
-
-
-
-
-
-
-
-
-
-
-# import subprocess
-# from flask import Flask, render_template, request, redirect, url_for, flash
-
-# app = Flask(__name__)
-# app.secret_key = 'your_secret_key'
-
-# # Dummy user data for login and subscription validation
-# users = {
-#     "user@example.com": {"password": "password123", "subscription": True},
- #    "test@domain.com": {"password": "testpass", "subscription": False},
-# }
-
-# @app.route('/')
-# def login():
-#     return render_template('login.html')
-
-# @app.route('/login', methods=['POST'])
-# def login_post():
-#     email = request.form.get('email')
- #    password = request.form.get('password')
-
- #    user = users.get(email)
-
-   #  if user and user['password'] == password:
-     #    if user['subscription']:
-       #      # Trigger the Streamlit app
-        #     #subprocess.Popen(["streamlit", "run", "MLD_orgi.py"], shell=True)
-     #        # Redirect to the Streamlit app URL
-           #  return redirect('https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py')
-      #   else:
-      #       flash('Subscription required!')
-      #       return redirect(url_for('login'))
-   #  else:
-     #    flash('Invalid credentials!')
-      #   return redirect(url_for('login'))
-
-# if __name__ == '__main__':
-  #   app.run(debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from flask import Flask, render_template, request, redirect, url_for, flash, session
-# from werkzeug.security import generate_password_hash, check_password_hash
+# from flask import Flask, render_template, redirect, url_for, request, session
+# from datetime import timedelta, datetime
 # import sqlite3
 
 # app = Flask(__name__)
-# app.secret_key = 'your_secret_key'  # Necessary for session handling
+# app.secret_key = "your_secret_key"
+# app.permanent_session_lifetime = timedelta(days=10)
 
-# # Database Setup
-# def create_db():
-#     conn = sqlite3.connect('users.db')
-#     cursor = conn.cursor()
-#     cursor.execute('''
-#         CREATE TABLE IF NOT EXISTS users (
-#             id INTEGER PRIMARY KEY AUTOINCREMENT,
-#             email TEXT NOT NULL UNIQUE,
-#             password TEXT NOT NULL,
-#             subscription TEXT DEFAULT 'free'
-#         )
-#     ''')
-#     conn.commit()
-#     conn.close()
-
-# # Database connection helper function
+# # Database connection
 # def get_db_connection():
-#     conn = sqlite3.connect('users.db')
+#     conn = sqlite3.connect('database.db')
 #     conn.row_factory = sqlite3.Row
 #     return conn
 
-# # Index route - login page
-# @app.route('/')
+# # Home route
+# @app.route("/")
+# def home():
+#     if "user" in session:
+#         return redirect(url_for("dashboard"))
+#     return redirect(url_for("login"))
+
+# # Login route
+# @app.route("/login", methods=["POST", "GET"])
 # def login():
-#     return render_template('login.html')
+#     if request.method == "POST":
+#         session.permanent = True
+#         user = request.form["username"]
+#         password = request.form["password"]
 
-# # Handle login post request
-# @app.route('/login', methods=['POST'])
-# def login_post():
-#     email = request.form.get('email')
-#     password = request.form.get('password')
+#         conn = get_db_connection()
+#         user_data = conn.execute("SELECT * FROM users WHERE username = ?", (user,)).fetchone()
+#         conn.close()
 
-#     conn = get_db_connection()
-#     user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
-#     conn.close()
+#         if user_data and user_data["password"] == password:
+#             session["user"] = user
+#             session["subscription"] = user_data["subscription"]
+#             return redirect(url_for("dashboard"))
+#         else:
+#             return render_template("login.html", error="Invalid Credentials")
+#     return render_template("login.html")
 
-#     if user and check_password_hash(user['password'], password):
-#         session['user_id'] = user['id']
-#         session['subscription'] = user['subscription']
-#         return redirect(url_for('dashboard'))
-#     else:
-#         flash('Invalid credentials!')
-#         return redirect(url_for('login'))
-
-# # Registration route - form
-# @app.route('/register')
+# # Registration route
+# @app.route("/register", methods=["POST", "GET"])
 # def register():
-#     return render_template('register.html')
+#     if request.method == "POST":
+#         username = request.form["username"]
+#         password = request.form["password"]
+#         subscription = request.form["subscription"]
 
-# # Handle registration post request
-# @app.route('/register', methods=['POST'])
-# def register_post():
-#     email = request.form.get('email')
-#     password = request.form.get('password')
-#     subscription = request.form.get('subscription')  # free, lite, pro, full
+#         conn = get_db_connection()
+#         conn.execute("INSERT INTO users (username, password, subscription, created_at) VALUES (?, ?, ?, ?)",
+#                      (username, password, subscription, datetime.now()))
+#         conn.commit()
+#         conn.close()
+#         return redirect(url_for("login"))
+#     return render_template("register.html")
 
-#     conn = get_db_connection()
-#     user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
 
-#     if user:
-#         flash('Email address already exists')
-#         return redirect(url_for('register'))
 
-#     hashed_password = generate_password_hash(password, method='sha256')
+# import hashlib
 
-#     conn.execute('INSERT INTO users (email, password, subscription) VALUES (?, ?, ?)',
-#                  (email, hashed_password, subscription))
-#     conn.commit()
-#     conn.close()
 
-#     flash('Registration successful! Please log in.')
-#     return redirect(url_for('login'))
+# def hash_url(url):
+#     return hashlib.sha256(url.encode()).hexdigest()
 
-# # Dashboard route - user is redirected here after successful login
-# @app.route('/dashboard')
+# @app.route('/streamlit')
+# def streamlit_access():
+#     if 'user' not in session:
+#         return redirect(url_for('login'))  # Redirect to login page if not logged in
+#     actual_url = "https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py"
+#     hashed_url = hash_url(actual_url)
+#     return redirect(f"/redirected/{hashed_url}")
+
+# @app.route('/redirected/<hashed_url>')
+# def redirected(hashed_url):
+#     # Here you can also add logic to validate the hashed URL if needed
+#     actual_url = "https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py"
+#     if hash_url(actual_url) == hashed_url:
+#         return redirect(actual_url)
+#     return "Invalid Access", 403
+
+
+
+
+# # Dashboard route
+# # @app.route("/dashboard")
+# # def dashboard():
+# #     if "user" in session:
+# #         subscription = session["subscription"]
+# #         if subscription == "premium" or subscription == "on-demand":
+# #             return redirect("https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py")
+# #         else:
+# #             return render_template("subscription.html", subscription=subscription)
+# #     else:
+# #         return redirect(url_for("login"))
+# @app.route("/dashboard")
 # def dashboard():
-#     if 'user_id' not in session:
-#         return redirect(url_for('login'))
-#     return render_template('dashboard.html', subscription=session['subscription'])
+#     if "user" in session:
+#         subscription = session["subscription"]
+#         if subscription in ["premium", "on-demand"]:
+#             return render_template("redirect.html")
+#         return render_template("dashboard.html", subscription=subscription)
+#     else:
+#         return redirect(url_for("login"))
+    
 
-# if __name__ == '__main__':
-#     create_db()  # Ensure the database is created
+# # Subscription options route
+# @app.route("/subscription", methods=["POST"])
+# def subscription():
+#     if "user" in session:
+#         subscription = request.form["subscription"]
+#         conn = get_db_connection()
+#         conn.execute("UPDATE users SET subscription = ? WHERE username = ?", (subscription, session["user"]))
+#         conn.commit()
+#         conn.close()
+#         session["subscription"] = subscription
+#         return redirect(url_for("dashboard"))
+#     return redirect(url_for("login"))
+
+# # Logout route
+# @app.route("/logout")
+# def logout():
+#     session.pop("user", None)
+#     return redirect(url_for("login"))
+
+# if __name__ == "__main__":
 #     app.run(debug=True)
 
 
 
-from flask import Flask, render_template, request, redirect, url_for, flash, session
 
-from werkzeug.security import generate_password_hash, check_password_hash
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from flask import Flask, render_template, request, redirect, url_for, session
+# from datetime import timedelta, datetime
+# import hashlib
+# import sqlite3
+
+# app = Flask(__name__)
+# app.secret_key = 'your_secret_key'
+
+# def hash_url(url):
+#     return hashlib.sha256(url.encode()).hexdigest()
+
+# # Database connection
+# def get_db_connection():
+#     conn = sqlite3.connect('database.db')
+#     conn.row_factory = sqlite3.Row
+#     return conn
+
+# @app.route('/')
+# def home():
+#     return render_template('login.html')  # Render your login page here
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']
+
+#         conn = get_db_connection()
+#         user = conn.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password)).fetchone()
+#         conn.close()
+
+#         if user:
+#             session['user'] = username
+#             session['subscription'] = user['subscription']  # Assuming you have a subscription field
+#             return redirect(url_for('dashboard'))
+
+#         return 'Invalid credentials', 403
+
+#     return render_template('login.html')
+
+# # Registration route
+# @app.route("/register", methods=["POST", "GET"])
+# def register():
+#     if request.method == "POST":
+#         username = request.form["username"]
+#         password = request.form["password"]
+#         subscription = request.form["subscription"]
+
+#         conn = get_db_connection()
+#         conn.execute("INSERT INTO users (username, password, subscription, created_at) VALUES (?, ?, ?, ?)",
+#                      (username, password, subscription, datetime.now()))
+#         conn.commit()
+#         conn.close()
+#         return redirect(url_for("login"))
+#     return render_template("register.html")
+
+
+# @app.route('/dashboard')
+# def dashboard():
+#     if 'user' not in session:
+#         return redirect(url_for('login'))
+
+#     return render_template('redirect.html')
+
+# @app.route('/streamlit')
+# def streamlit_access():
+#     if 'user' not in session:
+#         return redirect(url_for('login'))
+#     # Check subscription level
+#     if session.get('subscription') not in ['pro', 'premium']:
+#         return "Access denied. This feature is available for Pro and Premium users only.", 403
+    
+#     actual_url = "https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py"
+#     hashed_url = hash_url(actual_url)
+#     return redirect(f"/redirected/{hashed_url}")
+
+# @app.route('/redirected/<hashed_url>')
+# def redirected(hashed_url):
+#     actual_url = "https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py"
+#     if hash_url(actual_url) == hashed_url:
+#         return redirect(actual_url)
+#     return "Invalid Access", 403
+
+# @app.route('/logout')
+# def logout():
+#     session.pop('user', None)
+#     session.pop('subscription', None)
+#     return redirect(url_for('home'))
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+
+from flask import Flask, render_template, request, redirect, url_for, session
+import hashlib
+from datetime import timedelta, datetime
 import sqlite3
-
-
+import subprocess
+import threading
+import time
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
+# Function to start Streamlit app
+def run_streamlit():
+    subprocess.run(["streamlit", "run", "MLD.py"])
 
-app.secret_key = 'your_secret_key'  # Necessary for session handling
+def hash_url(url):
+    return hashlib.sha256(url.encode()).hexdigest()
 
-
-
-# Database Setup
-
-def create_db():
-
-    conn = sqlite3.connect('users.db')
-
-    cursor = conn.cursor()
-
-    cursor.execute('''
-
-        CREATE TABLE IF NOT EXISTS users (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            email TEXT NOT NULL UNIQUE,
-
-            password TEXT NOT NULL,
-
-            subscription TEXT DEFAULT 'free'
-
-        )
-
-    ''')
-
-    conn.commit()
-
-    conn.close()
-
-
-
-# Database connection helper function
-
+# Database connection
 def get_db_connection():
-
-    conn = sqlite3.connect('users.db')
-
-    conn.row_factory = sqlite3.Row
-
-    return conn
-
-
-
-# Index route - login page
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route('/')
+def home():
+    return render_template('login.html')
 
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
 
-    return render_template('login.html')
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password)).fetchone()
+        conn.close()
 
+        if user:
+            session['user'] = username
+            session['subscription'] = user['subscription']  # Assuming you have a subscription field
+            return redirect(url_for('dashboard'))
 
+        return 'Invalid credentials', 403
 
-# Handle login post request
-
-@app.route('/login', methods=['POST'])
-
-def login_post():
-
-    email = request.form.get('email')
-
-    password = request.form.get('password')
-
-
-
-    conn = get_db_connection()
-
-    user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
-
-    conn.close()
+    return render_template('login.html')
 
 
-
-    if user and check_password_hash(user['password'], password):
-
-        session['user_id'] = user['id']
-
-        session['subscription'] = user['subscription']
-
-        return redirect(url_for('dashboard'))
-
-    else:
-
-        flash('Invalid credentials!')
-
-        return redirect(url_for('login'))
-
-
-
-# Registration route - form
-
-@app.route('/register')
-
+# Registration route
+@app.route("/register", methods=["POST", "GET"])
 def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        subscription = request.form["subscription"]
 
-    return render_template('register.html')
-
-
-
-# Handle registration post request
-
-@app.route('/register', methods=['POST'])
-
-def register_post():
-
-    email = request.form.get('email')
-
-    password = request.form.get('password')
-
-    subscription = request.form.get('subscription')  # free, lite, pro, full
-
-
-
-    conn = get_db_connection()
-
-    user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
-
-
-
-    if user:
-
-        flash('Email address already exists')
-
-        return redirect(url_for('register'))
-
-
-
-    hashed_password = generate_password_hash(password, method='sha256')
-
-
-
-    conn.execute('INSERT INTO users (email, password, subscription) VALUES (?, ?, ?)',
-
-                 (email, hashed_password, subscription))
-
-    conn.commit()
-
-    conn.close()
-
-
-
-    flash('Registration successful! Please log in.')
-
-    return redirect(url_for('login'))
-
-
-
-# Dashboard route - user is redirected here after successful login
+        conn = get_db_connection()
+        conn.execute("INSERT INTO users (username, password, subscription, created_at) VALUES (?, ?, ?, ?)",
+                     (username, password, subscription, datetime.now()))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("login"))
+    return render_template("register.html")
 
 @app.route('/dashboard')
-
 def dashboard():
+    if 'user' not in session:
+        return redirect(url_for('login'))
 
-    if 'user_id' not in session:
+    # Determine which action to take based on subscription level
+    if session.get('subscription') in ['free', 'on demand']:
+        # Run Streamlit app directly
+        thread = threading.Thread(target=run_streamlit)
+        thread.start()
+        time.sleep(2)  # Give it a moment to start
+        return render_template('streamlit_running.html')  # Show a message that Streamlit is running
+    else:
+        return render_template('redirect.html')
 
-        return redirect(url_for('login'))
+@app.route('/streamlit')
+def streamlit_access():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    # Check subscription level
+    if session.get('subscription') not in ['pro', 'premium']:
+        return redirect(url_for('dashboard'))  # Direct to dashboard for free or on-demand users
+    
+    actual_url = "https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py"
+    return redirect(actual_url)
 
-    return redirect('https://share.streamlit.io/sunny11286/ml-dashboard-code/MLD.py') #render_template('dashboard.html', subscription=session['subscription'])
-
-
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    session.pop('subscription', None)
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
-
-    create_db()  # Ensure the database is created
-
-app.run(debug=True)
-
-
+    # Start the Streamlit app in a separate thread
+    thread = threading.Thread(target=run_streamlit)
+    thread.start()
+    
+    # Run the Flask app
+    app.run(debug=True)
