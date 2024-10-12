@@ -1,6 +1,2 @@
 flask
-werkzeug
 streamlit==1.9.2
-streamlit-aggrid==1.0.0
-streamlit-autorefresh==1.0.1
-streamlit-pandas-profiling==0.1.3
